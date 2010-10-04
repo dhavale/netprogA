@@ -13,7 +13,7 @@ int main ()
 
   service_socket_fd                   = socket ( PF_INET, SOCK_STREAM, 0 );
   service_socket_addr.sin_family      = AF_INET;
-  service_socket_addr.sin_port        = 10000;
+  service_socket_addr.sin_port        = htons(4455);
   service_socket_addr.sin_addr.s_addr = 0x0100007f;
 
   printf ( "Connecting...\r\n" );
@@ -30,7 +30,7 @@ int main ()
   printf ( "Connected to server\r\n" );
 
   for(;;){
-    scanf ( "%s", buf );
+    fgets(buf,100,stdin);
     if ( ! write ( service_socket_fd, buf, 1 + strlen(buf) ) ){
      break;
     }
