@@ -4,11 +4,11 @@
 #include <sys/socket.h>
 #include <netinet/ip.h>
 
-int main ()
+int main (int argc, char * argv[])
 {
   int service_socket_fd;
   struct sockaddr_in service_socket_addr;
-  char buf[101];
+  char *buf= malloc(101);
   int len;
 
   service_socket_fd                   = socket ( PF_INET, SOCK_STREAM, 0 );
@@ -30,12 +30,16 @@ int main ()
   printf ( "Connected to server\r\n" );
 
   for(;;){
-    fgets(buf,100,stdin);
-    if ( ! write ( service_socket_fd, buf, 1 + strlen(buf) ) ){
+    buf = fgets(buf,100,stdin);
+	if(buf==NULL) break;
+    if (  write ( service_socket_fd, buf, 1 + strlen(buf) )<= 0 ){
+	
+	printf("\n1.Server closed down..quitting");
      break;
     }
     len = read ( service_socket_fd, buf, 100 );
     if ( len == 0 ){
+	printf("\n2.Server closed down..quitting");
      break;
     }
     buf[len] = '\0';
