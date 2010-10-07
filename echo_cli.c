@@ -5,6 +5,7 @@
 #include <netinet/ip.h>
 #include <arpa/inet.h>
 #include <assert.h>
+#include <errno.h>
 #include "np.h"
 
 int main (int argc, char * argv[])
@@ -49,30 +50,32 @@ int main (int argc, char * argv[])
   fflush(stdout);
 
 //  write (pipe_fd, "\n\n\n\nConnecting...\n" );
-
+#ifdef DEBUG
 printf("\nbefore connect\n");
+#endif
   if ( connect ( service_socket_fd,
                  (struct sockaddr *)&service_socket_addr,
                  sizeof(service_socket_addr)
                )
       != 0 ){
    perror("Unable to connect!! \n");
-   sprintf (msg,"Unable to connect\r\n" );
+   sprintf (msg,"Unable to connect %d\r\n",errno );
    write(pipe_fd,msg,strlen(msg));
    return 0;
   }
 
+#ifdef DEBUG
 printf("\nafter connect\n");
+#endif
 
   sprintf(msg,"Connected to server");
   write ( pipe_fd,msg,strlen(msg));
  // write (pipe_fd,"\n test message..");
 
-#ifdef DEBUG
-	printf("\nconnected to server\n");
-#endif
 
-	printf("\nbefore far Start typing!! :\n");
+	printf("\nconnected to server\n");
+
+	printf("\nStart typing!! :\n");
   for(;;){
     ret = read(fileno(stdin),buf,MAXLEN);
 	if(ret==0)
