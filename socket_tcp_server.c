@@ -89,7 +89,7 @@ int main ()
 	}
   }
 
- printf("\nReturning from thread with desc %d!",service_socket_fd);
+ printf("\nReturning from thread with desc %d!\n",service_socket_fd);
  close(service_socket_fd);
  pthread_exit(0);
 
