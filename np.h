@@ -6,7 +6,7 @@
 #define MAXLEN 400
 
 
-
+#if 0
 struct in_addr basic_checks(const char * str_addr)
 {
 struct hostent *hp;
@@ -45,4 +45,5 @@ struct in_addr addr_byte;
 	printf("\nreturning from %s with %x",__FUNCTION__,addr_byte);	
 	return addr_byte;
 }
+#endif
 #endif

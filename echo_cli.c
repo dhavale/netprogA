@@ -15,14 +15,14 @@ int main (int argc, char * argv[])
   char *buf= malloc(MAXLEN);
   char msg[MAXLEN] = {};
   int len;
-  struct in_addr ip_addr;
+  //struct in_addr ip_addr;
 
   assert(argc==3);
 
-  ip_addr = basic_checks(argv[1]);
+ // ip_addr = basic_checks(argv[1]);
  
  
-  	printf("converted ip: %x",ip_addr);
+  	printf("connecting to: %s",argv[1]);
    
   if(argc==3){
 	sscanf(argv[2],"%d",&pipe_fd);
@@ -33,8 +33,14 @@ int main (int argc, char * argv[])
   service_socket_fd                   = socket ( AF_INET, SOCK_STREAM, 0 );
   service_socket_addr.sin_family      = AF_INET;
   service_socket_addr.sin_port        = htons(4455);
- // memcpy(&service_socket_addr.sin_addr.s_addr,&ip_addr,sizeof(service_socket_addr.sin_addr.s_addr));
- service_socket_addr.sin_addr = ip_addr;
+  //memcpy(&service_socket_addr.sin_addr,&ip_addr,sizeof(service_socket_addr.sin_addr));
+// service_socket_addr.sin_addr = ip_addr;
+  	if(inet_pton(AF_INET,argv[1],&service_socket_addr.sin_addr)!=1)
+	{
+		sprintf(msg,"\ncannot convert string addr to binary.. quitting");
+		write(pipe_fd,msg,strlen(msg));
+		return;
+	}
 
 #ifdef DEBUG
 	printf("service_socket_fd : %d\n",service_socket_fd);
